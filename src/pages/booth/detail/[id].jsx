@@ -23,8 +23,28 @@ export async function getServerSideProps(context) {
     // 데이터를 가져오기 위한 비동기 작업을 수행합니다.
     const fetchBooths = async(id) => {
         try{
-            const res = await API.get(`/store/info/${id}`)
-            const boothData = res.data;
+            // const res = await API.get(`/store/info/${id}`)
+            const boothData = {
+              id: 3,
+              name: "이작까야",
+              type: "야간부스",
+              operator: "산업시스템공학과",
+              logo_image: [
+                  "http://127.0.0.1.8000/media/5/%EC%82%B0%EC%97%85%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B3%B5%ED%95%99%EA%B3%BC_WsCY49R.jpg"
+              ],
+              like_cnt: 1,
+              start_at: "2023-05-24",
+              end_at: "2023-05-24",
+              location: "원흥관 4층",
+              section: "4",
+              description: "뭐야 왤케 맛있어?",
+              menu: {},
+              menu_image: [
+                  "http://127.0.0.1.8000/media/4/%EC%82%B0%EC%97%85%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B3%B5%ED%95%99%EA%B3%BC_okiO6hN.jpg"
+              ],
+              concept: "이자카야",
+              is_liked: true
+          }
             return boothData;
         }catch(err){
             console.log(err)
@@ -140,9 +160,28 @@ const fetchBooth = async() => {
     try {
         // const response = await axios.get(`posts/${id}`);
         // const postData = response.data;
-        const response = await API.get(`/store/info/${sId}`);
-        const boothDetailData = response.data;
+        // const response = await API.get(`/store/info/${sId}`);
+        const boothDetailData = {
+          id: 3,
+          name: "이작까야",
+          type: "야간부스",
+          operator: "산업시스템공학과",
+          logo_image: [
+          ],
+          like_cnt: 1,
+          start_at: "2023-05-24",
+          end_at: "2023-05-24",
+          location: "원흥관 4층",
+          section: "4",
+          description: "뭐야 왤케 맛있어?",
+          menu: {},
+          menu_image: [
+          ],
+          concept: "이자카야",
+          is_liked: true
+      }
         setBooth(boothDetailData);
+        console.log(booth.menu_image.length===0);
         //console.log(boothDetailData.is_liked)
     } catch (error) {
         console.error('Error: ', error);
@@ -154,10 +193,10 @@ useEffect(() => {
     fetchComments();
 }, [isLikeClick]);
 
-// booth 정보 없으면 로딩 표시
-  if (booth.length === 0) {
-    return <Loading />;
-  }
+// // booth 정보 없으면 로딩 표시
+//   if (booth.length === 0) {
+//     return <Loading />;
+//   }
 
   // 댓글 등록
   const handleSubmission = (event) => {
@@ -199,11 +238,11 @@ useEffect(() => {
               <BoothLogoImage 
                 src={booth.logo_image}
                 alt={booth.logo_image}
-                /> : 
+              /> : 
               <BoothLogoImage 
                 src={DeafultImage}
                 alt="booth defaultimage"
-                /> }
+              /> }
         </BoothLogoWrapper>
         <BoothDetailHeader>
             <BoothDetailHeaderWrapper>
@@ -239,32 +278,30 @@ useEffect(() => {
         <FontAwesomeIcon icon={faClock} style={{marginRight:"10px"}}/>
             {booth.start_at} ~ {booth.end_at}
         </BoothDetailTime>
-        <BoothDetailSeparator />
-        <BoothDetailMenuWrapper>
+
+        { ( booth.menu_image.length != 0 ) ?
+        <>
+          <BoothDetailSeparator />
+          <BoothDetailMenuWrapper>
             <BoothDetailMenuHeader>
-                <BoothDetailMenuTitle>
-                    메뉴
-                </BoothDetailMenuTitle>
-                {/* <BoothDetailMenuAllSee>
-                    전체메뉴 보기
-                </BoothDetailMenuAllSee> */}
+              <BoothDetailMenuTitle>
+                메뉴
+              </BoothDetailMenuTitle>
             </BoothDetailMenuHeader>
-            { ( booth.menu_image && booth.menu_image.length > 0 ) ?
-              <BoothImageSlider>
-                { booth.menu_image.map((image)=>{
-                  <BoothMenuImage 
-                    key={image.id}
-                    src={image.url} 
-                    alt="Booth Menu Image"
-                    width={250}
-                    height={250}
-                  />
-                }) }
-              </BoothImageSlider> : <BoothImageSlider>
-                메뉴 사진이 없습니다.
-              </BoothImageSlider>
-            }
-        </BoothDetailMenuWrapper>
+            <BoothImageSlider>
+              { booth.menu_image.map((image)=>{
+                <BoothMenuImage 
+                  key={image.id}
+                  src={image.url} 
+                  alt="Booth Menu Image"
+                  width={250}
+                  height={250}
+                />
+              }) }
+            </BoothImageSlider>
+          </BoothDetailMenuWrapper>
+        </>
+        : <></> }
 
         {/* 댓글 */}
         <CommentWrapper>
